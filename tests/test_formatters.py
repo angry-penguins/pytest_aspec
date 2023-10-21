@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import pytest
-from pytest_pspec import formatters
+from pytest_aspec import formatters
 
 
 class TestFormatTitle(object):

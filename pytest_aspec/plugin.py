@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-import pytest
 from _pytest.terminal import TerminalReporter
-
-from . import models
+import pytest
 from .wrappers import UnicodeWrapper, OutcomeCharacters
+from . import models
+
 
 _PSPEC_OPTIONS = [
     ('pspec_passed', 'passed',
@@ -17,6 +15,7 @@ _PSPEC_OPTIONS = [
     ('pspec_default', 'default',
      'prefix strings for other tests, you may use unicodeescape here',),
 ]
+
 
 def pytest_addoption(parser):
     group = parser.getgroup('terminal reporting', 'reporting', after='general')

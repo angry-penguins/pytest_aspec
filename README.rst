@@ -1,11 +1,5 @@
-pytest-pspec
+pytest_aspec
 ==============
-
-.. image:: https://travis-ci.org/gowtham-sai/pytest-pspec.svg?branch=master
-    :target: https://travis-ci.org/gowtham-sai/pytest-pspec
-
-.. image:: https://codecov.io/gh/gowtham-sai/pytest-pspec/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/gowtham-sai/pytest-pspec
 
 A `pspec format`_ reporter for pytest
 
@@ -18,7 +12,7 @@ Install
 
 ::
 
-    pip install pytest-pspec
+    pip install pytest_aspec
 
 
 Usage
@@ -66,26 +60,25 @@ running ``pytest --pspec`` outputs
 .. code-block::
 
     demo
-     \N{cherry blossom} it adds two integers and returns integer
-     \N{cherry blossom} should find difference between integers
+     🌸 it adds two integers and returns integer
+     🌸 should find difference between integers
 
 
 
 Configuration file options
 --------------------------
 
-pspec\_format
+pspec\_passed
 ~~~~~~~~~~~~~~~
 
-Specifies pspec report format, ``plaintext`` or ``utf8`` (default:
-``utf8``). Ex:
+Specifies pspec passed character. Ex:
 
 .. code:: ini
 
     # content of pytest.ini
     # (or tox.ini or setup.cfg)
     [pytest]
-    pspec_format = plaintext
+    pspec_passed=\N{heavy check mark}\N{vs16}
 
 ::
 
@@ -98,5 +91,55 @@ Specifies pspec report format, ``plaintext`` or ``utf8`` (default:
 
     test_demo.py
     Pytest pspec
-     [x] prints a BDD style output to your tests
-     [x] lets you focus on the behavior
+     ✔️ prints a BDD style output to your tests
+     ✔️ lets you focus on the behavior
+
+pspec\_failed
+~~~~~~~~~~~~~~~
+
+Specifies pspec failed character. Ex:
+
+.. code:: ini
+
+    # content of pytest.ini
+    # (or tox.ini or setup.cfg)
+    [pytest]
+    pspec_failed=\N{skull and crossbones}\N{vs16}
+
+::
+
+    $ pytest test_demo.py
+    ============================= test session starts ==============================
+    platform darwin -- Python 3.5.0, pytest-3.0.7, py-1.4.33, pluggy-0.4.0
+    rootdir: /private/tmp/demo, inifile: pytest.ini
+    plugins: pspec-dev
+    collected 2 items
+
+    test_demo.py
+    Pytest pspec
+     🌸️ this failed??!!
+
+pspec\_skipped
+~~~~~~~~~~~~~~~
+
+Specifies pspec skipped character. Ex:
+
+.. code:: ini
+
+    # content of pytest.ini
+    # (or tox.ini or setup.cfg)
+    [pytest]
+    pspec_skipped=\N{snowman without snow}\N{vs16}
+
+::
+
+    $ pytest test_demo.py
+    ============================= test session starts ==============================
+    platform darwin -- Python 3.5.0, pytest-3.0.7, py-1.4.33, pluggy-0.4.0
+    rootdir: /private/tmp/demo, inifile: pytest.ini
+    plugins: pspec-dev
+    collected 2 items
+
+    test_demo.py
+    Pytest pspec
+     ☃️️ skipping this test for now

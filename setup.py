@@ -12,20 +12,20 @@ def read(fname):
 
 
 setup(
-    name='pytest-pspec',
-    version='0.0.4',
-    description='A rspec format reporter for Python ptest',
+    name='pytest_aspec',
+    version='0.8',
+    description='A rspec format reporter for pytest',
     long_description=read('README.rst'),
-    author='Gowtham Sai',
-    author_email='hello@gowtham-sai.com',
-    url='https://github.com/gowtham-sai/pytest-pspec',
+    author='2ps',
+    author_email='p.shingavi@yahoo.com',
+    url='https://github.com/angry-penguins/pytest-aspec',
     keywords='pytest pspec test report bdd rspec',
     install_requires=[
         'pytest>=3.0.0',
         'six>=1.11.0',
     ],
     scripts=['bin/pspec'],
-    packages=['pytest_pspec'],
+    packages=['pytest_aspec'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Framework :: Pytest',
@@ -44,7 +44,7 @@ setup(
     ],
     entry_points={
         'pytest11': [
-            'pspec = pytest_pspec.plugin',
+            'pspec = pytest_aspec.plugin',
         ],
     },
 )

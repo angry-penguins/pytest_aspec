@@ -10,7 +10,7 @@ class TestReport(object):
     @pytest.fixture
     def testdir(self, testdir):
         testdir.makeconftest("""
-            pytest_plugins = 'pytest_pspec.plugin'
+            pytest_plugins = 'pytest_aspec.plugin'
         """)
         return testdir
 
