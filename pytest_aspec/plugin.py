@@ -113,8 +113,7 @@ class PspecTerminalReporter(TerminalReporter):
         for wrapper in self.result_wrappers:
             result = wrapper(result)
 
-        if result.header != self._last_header:
-            self._last_header = result.header
-            self._tw.sep(' ')
-            self._tw.line(result.header)
-            self._tw.line(str(result))
+        self._last_header = result.header
+        self._tw.sep(' ')
+        self._tw.line(result.header)
+        self._tw.line(str(result))
