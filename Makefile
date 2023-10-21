@@ -7,7 +7,7 @@ install:  ## Install package for development
 	@pip install -r requirements-dev.txt
 
 test:
-	@py.test tests/ --cov pytest_pspec --cov-report term-missing
+	@py.test -x tests/ --cov pytest_pspec --cov-report term-missing
 
 check:  ## Run static code checks
 	isort --check

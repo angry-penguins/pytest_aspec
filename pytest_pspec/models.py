@@ -50,14 +50,6 @@ class Node(object):
 
 @six.python_2_unicode_compatible
 class Result(object):
-
-    _OUTCOME_REPRESENTATION = {
-        'passed': '[x]',
-        'failed': '[ ]',
-        'skipped': '>>>',
-    }
-    _default_outcome_representation = '>>>'
-
     def __init__(self, outcome, node):
         self.outcome = outcome
         self.node = node
@@ -68,19 +60,6 @@ class Result(object):
             self.outcome,
             self.node
         )
-
-    def __str__(self):
-        representation = self._OUTCOME_REPRESENTATION.get(
-            self.outcome,
-            self._default_outcome_representation
-        )
-
-        line = ' {outcome_representation} {node}'.format(
-            outcome_representation=representation,
-            node=self.node
-        )
-
-        return line
 
     @property
     def header(self):

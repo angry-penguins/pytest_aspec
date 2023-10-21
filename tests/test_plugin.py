@@ -64,7 +64,7 @@ class TestReport(object):
     def test_should_output_plaintext_using_a_config_option(self, testdir):
         testdir.makeini("""
             [pytest]
-            pspec_format=plaintext
+            pspec_passed=[x]
         """)
         testdir.makepyfile("""
             def test_a_feature_is_working():

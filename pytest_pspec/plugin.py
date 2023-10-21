@@ -4,8 +4,19 @@ from __future__ import unicode_literals
 import pytest
 from _pytest.terminal import TerminalReporter
 
-from . import models, wrappers
+from . import models
+from .wrappers import UnicodeWrapper, OutcomeCharacters
 
+_PSPEC_OPTIONS = [
+    ('pspec_passed', 'passed',
+     'prefix strings for passed tests, you may use unicodeescape here',),
+    ('pspec_failed', 'failed',
+     'prefix strings for failed tests, you may use unicodeescape here',),
+    ('pspec_skipped', 'skipped',
+     'prefix strings for skipped tests, you may use unicodeescape here',),
+    ('pspec_default', 'default',
+     'prefix strings for other tests, you may use unicodeescape here',),
+]
 
 def pytest_addoption(parser):
     group = parser.getgroup('terminal reporting', 'reporting', after='general')
@@ -13,11 +24,12 @@ def pytest_addoption(parser):
         '--pspec', action='store_true', dest='pspec', default=False,
         help='Report test progress in pspec format'
     )
-    parser.addini(
-        'pspec_format',
-        help='pspec report format (plaintext|utf8)',
-        default='utf8'
-    )
+    for x, _, help_message in _PSPEC_OPTIONS:
+        parser.addini(
+            x,
+            help=help_message,
+            default=None
+        )
 
 
 @pytest.mark.trylast
@@ -66,9 +78,15 @@ class PspecTerminalReporter(TerminalReporter):
             classes=self.config.getini('python_classes')
         )
         self.result_wrappers = []
-
-        if config.getini('pspec_format') != 'plaintext':
-            self.result_wrappers.append(wrappers.UnicodeWrapper)
+        self.result_wrappers.append(UnicodeWrapper)
+        for option_name, attr_name, _ in _PSPEC_OPTIONS:
+            value = config.getini(option_name)
+            if value:
+                try:
+                    value = eval(f"'{value}'")
+                except:
+                    pass
+                setattr(OutcomeCharacters, attr_name, value)
 
     def _register_stats(self, report):
         """
@@ -100,8 +118,4 @@ class PspecTerminalReporter(TerminalReporter):
             self._last_header = result.header
             self._tw.sep(' ')
             self._tw.line(result.header)
-
-        try:
-            self._tw.line(unicode(result))
-        except NameError:
             self._tw.line(str(result))
