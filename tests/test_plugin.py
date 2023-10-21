@@ -57,7 +57,7 @@ class TestReport(object):
         """)
 
         result = testdir.runpytest('--pspec')
-        expected = ' » a skipped test'
+        expected = ' \N{warning sign}\N{vs16} a skipped test'
 
         assert expected in result.stdout.str()
 

@@ -14,8 +14,8 @@ class Wrapper(object):
 class OutcomeCharacters:
     passed = '\N{cherry blossom}'
     failed = '\N{wilted flower}'
-    skipped = '»'
-    default = '»'
+    skipped = '\N{warning sign}\N{vs16}'
+    default = '\N{warning sign}\N{vs16}'
 
 
 class UnicodeWrapper(Wrapper):
