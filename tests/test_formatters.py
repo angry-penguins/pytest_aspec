@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
+
 from pytest_aspec import formatters
 
 

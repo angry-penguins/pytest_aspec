@@ -1,0 +1,8 @@
+[flake8]
+ignore=E201,E202,W503,W504,W391,E722
+exclude =
+  .venv/**/*
+  */__init__.py
+  */templates/**/*
+; max_complexity=6
+max_line_length=120

@@ -19,8 +19,24 @@ lint:  ## Run static code checks
   	&& isort --check pytest_aspec tests \
 	  && flake8 .
 
+version:
+	@source .venv/bin/activate \
+	  && bumpversion minor
+	@git push origin --tags
+	@git push origin main
+
+build:
+	source .venv/bin/activate \
+	  && python -B -O setup.py sdist
+
 clean:  ## Clean cache and temporary files
 	@find . -name "*.pyc" | xargs rm -rf
 	@find . -name "*.pyo" | xargs rm -rf
 	@find . -name "__pycache__" -type d | xargs rm -rf
 	@rm -rf *.egg-info
+
+upload:
+	source .venv/bin/activate \
+	  && twine upload dist/*
+
+publish: clean version build upload

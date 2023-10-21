@@ -86,8 +86,8 @@ class TestReport(object):
             pspec_skipped=\N{avocado}
         """)
         testdir.makepyfile("""
-            import pytest 
-            
+            import pytest
+
             def test_failed_char():
                 "did we fail?"
                 assert False
@@ -108,9 +108,9 @@ class TestReport(object):
             pspec_skipped=\N{avocado}
         """)
         testdir.makepyfile("""
-            import pytest 
-          
-            @pytest.mark.skip  
+            import pytest
+
+            @pytest.mark.skip
             def test_failed_char():
                 "did we skip?"
                 assert False

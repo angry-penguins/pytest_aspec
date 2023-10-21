@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from _pytest.terminal import TerminalReporter
 import pytest
-from .wrappers import UnicodeWrapper, OutcomeCharacters
-from . import models
+from _pytest.terminal import TerminalReporter
 
+from . import models
+from .wrappers import OutcomeCharacters, UnicodeWrapper
 
 _PSPEC_OPTIONS = [
     ('pspec_passed', 'passed',
@@ -44,7 +44,7 @@ def pytest_configure(config):
 def pytest_collection_modifyitems(config, items):
     if not config.option.pspec:
         return
-    
+
     for item in items:
         node = item.obj
         parent = item.parent.obj
@@ -96,8 +96,8 @@ class PspecTerminalReporter(TerminalReporter):
         https://github.com/pytest-dev/pytest/blob/47a2a77/_pytest/terminal.py#L198-L201
         """
         res = self.config.hook.pytest_report_teststatus(
-                report=report,
-                config=self.config)
+            report=report,
+            config=self.config)
         category = res[0]
         self.stats.setdefault(category, []).append(report)
         self._tests_ran = True
