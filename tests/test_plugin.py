@@ -22,7 +22,7 @@ class TestReport(object):
 
         result = testdir.runpytest('--pspec')
 
-        expected = '\033[92m ✓ a feature is working\033[0m'
+        expected = ' ✓ a feature is working'
         assert expected in result.stdout.str()
 
     def test_should_not_modify_nodeid_when_disabled_test(self, testdir):
@@ -43,7 +43,7 @@ class TestReport(object):
         """)
 
         result = testdir.runpytest('--pspec')
-        expected = '\033[91m ✗ a failed test of a feature\033[0m'
+        expected = ' ✗ a failed test of a feature'
 
         assert expected in result.stdout.str()
 
@@ -57,18 +57,9 @@ class TestReport(object):
         """)
 
         result = testdir.runpytest('--pspec')
-        expected = '\033[93m » a skipped test\033[0m'
+        expected = ' » a skipped test'
 
         assert expected in result.stdout.str()
-
-    def test_should_not_print_colors_when_disabled_by_parameter(self, testdir):
-        testdir.makepyfile("""
-            def test_a_feature_is_working():
-                assert True
-        """)
-        result = testdir.runpytest('--color=no', '--pspec')
-
-        assert '\033[92m' not in result.stdout.str()
 
     def test_should_output_plaintext_using_a_config_option(self, testdir):
         testdir.makeini("""
@@ -81,7 +72,7 @@ class TestReport(object):
         """)
         result = testdir.runpytest('--pspec')
 
-        expected = '\033[92m [x] a feature is working\033[0m'
+        expected = ' [x] a feature is working'
         assert expected in result.stdout.str()
 
     def test_should_print_the_test_class_name(self, testdir):
@@ -150,7 +141,7 @@ class TestReport(object):
 
         result = testdir.runpytest('--pspec')
 
-        expected = '\033[92m ✓ must return as header\033[0m'
+        expected = ' ✓ must return as header'
         assert expected in result.stdout.str()
 
     def test_should_print_func_name_if_doc_is_not_present(self, testdir):
@@ -161,7 +152,7 @@ class TestReport(object):
 
         result = testdir.runpytest('--pspec')
 
-        expected = '\033[92m ✓ a feature is working\033[0m'
+        expected = ' ✓ a feature is working'
         assert expected in result.stdout.str()
 
     def test_should_print_class_name_if_doc_is_present(self, testdir):

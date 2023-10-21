@@ -70,9 +70,6 @@ class PspecTerminalReporter(TerminalReporter):
         if config.getini('pspec_format') != 'plaintext':
             self.result_wrappers.append(wrappers.UTF8Wrapper)
 
-        if config.option.color != 'no':
-            self.result_wrappers.append(wrappers.ColorWrapper)
-
     def _register_stats(self, report):
         """
         This method is not created for this plugin, but it is needed in order
