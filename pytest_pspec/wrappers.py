@@ -13,7 +13,7 @@ class Wrapper(object):
 
 class OutcomeCharacters:
     passed = '\N{cherry blossom}'
-    failed = '✗'
+    failed = '\N{wilted flower}'
     skipped = '»'
     default = '»'
 

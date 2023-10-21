@@ -43,7 +43,7 @@ class TestReport(object):
         """)
 
         result = testdir.runpytest('--pspec')
-        expected = ' ✗ a failed test of a feature'
+        expected = ' \N{wilted flower} a failed test of a feature'
 
         assert expected in result.stdout.str()
 
