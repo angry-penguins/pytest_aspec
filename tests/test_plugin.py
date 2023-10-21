@@ -22,7 +22,7 @@ class TestReport(object):
 
         result = testdir.runpytest('--pspec')
 
-        expected = ' ✓ a feature is working'
+        expected = ' \N{cherry blossom} a feature is working'
         assert expected in result.stdout.str()
 
     def test_should_not_modify_nodeid_when_disabled_test(self, testdir):
@@ -88,10 +88,10 @@ class TestReport(object):
         result = testdir.runpytest('--pspec')
 
         lines = result.stdout.get_lines_after('Foo')
-        assert '✓ foo' in lines[0]
+        assert '\N{cherry blossom} foo' in lines[0]
 
         lines = result.stdout.get_lines_after('Bar')
-        assert '✓ bar' in lines[0]
+        assert '\N{cherry blossom} bar' in lines[0]
 
     def test_should_print_the_module_name_of_a_test_without_class(
         self,
@@ -130,7 +130,7 @@ class TestReport(object):
         result = testdir.runpytest('--pspec')
 
         lines = result.stdout.get_lines_after('Test')
-        assert '✓ runs' in lines[0]
+        assert '\N{cherry blossom} runs' in lines[0]
 
     def test_should_print_doc_string_if_present(self, testdir):
         testdir.makepyfile("""
@@ -141,7 +141,7 @@ class TestReport(object):
 
         result = testdir.runpytest('--pspec')
 
-        expected = ' ✓ must return as header'
+        expected = ' \N{cherry blossom} must return as header'
         assert expected in result.stdout.str()
 
     def test_should_print_func_name_if_doc_is_not_present(self, testdir):
@@ -152,7 +152,7 @@ class TestReport(object):
 
         result = testdir.runpytest('--pspec')
 
-        expected = ' ✓ a feature is working'
+        expected = ' \N{cherry blossom} a feature is working'
         assert expected in result.stdout.str()
 
     def test_should_print_class_name_if_doc_is_present(self, testdir):

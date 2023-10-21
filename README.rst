@@ -66,8 +66,8 @@ running ``pytest --pspec`` outputs
 .. code-block::
 
     demo
-     ✓ it adds two integers and returns integer
-     ✓ should find difference between integers
+     \N{cherry blossom} it adds two integers and returns integer
+     \N{cherry blossom} should find difference between integers
 
 
 
