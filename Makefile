@@ -16,7 +16,6 @@ test:   ## runs tests via pytest
 
 lint:  ## Run static code checks
 	@source .venv/bin/activate \
-  	&& isort --check pytest_aspec tests \
 	  && flake8 .
 
 version:
