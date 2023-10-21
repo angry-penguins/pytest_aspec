@@ -75,6 +75,51 @@ class TestReport(object):
         expected = ' [x] a feature is working'
         assert expected in result.stdout.str()
 
+    def test_custom_failed(self, testdir):
+        """
+        can we specify custom failed characters in our ini?
+        """
+        testdir.makeini("""
+            [pytest]
+            pspec_passed=\N{snowman}\N{vs16}
+            pspec_failed=\N{snowflake}\N{vs16}
+            pspec_skipped=\N{avocado}
+        """)
+        testdir.makepyfile("""
+            import pytest 
+            
+            def test_failed_char():
+                "did we fail?"
+                assert False
+        """)
+        result = testdir.runpytest('--pspec')
+
+        expected = ' \N{snowflake}\N{vs16} did we fail?'
+        assert expected in result.stdout.str()
+
+    def test_custom_skipped(self, testdir):
+        """
+        can we specify custom failed characters in our ini?
+        """
+        testdir.makeini("""
+            [pytest]
+            pspec_passed=\N{snowman}\N{vs16}
+            pspec_failed=\N{snowflake}\N{vs16}
+            pspec_skipped=\N{avocado}
+        """)
+        testdir.makepyfile("""
+            import pytest 
+          
+            @pytest.mark.skip  
+            def test_failed_char():
+                "did we skip?"
+                assert False
+        """)
+        result = testdir.runpytest('--pspec')
+
+        expected = ' \N{avocado} did we skip?'
+        assert expected in result.stdout.str()
+
     def test_should_print_the_test_class_name(self, testdir):
         testdir.makepyfile("""
             class TestFoo(object):
