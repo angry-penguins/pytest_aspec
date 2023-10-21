@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
-from _pytest.terminal import TerminalReporter
-
-from . import models
-from .wrappers import OutcomeCharacters, UnicodeWrapper
+from .wrappers import OutcomeCharacters
 
 _PSPEC_OPTIONS = [
     ('pspec_passed', 'passed',
@@ -14,6 +11,14 @@ _PSPEC_OPTIONS = [
      'prefix strings for skipped tests, you may use unicodeescape here',),
     ('pspec_default', 'default',
      'prefix strings for other tests, you may use unicodeescape here',),
+    ('pspec_short_passed', 'short_passed',
+     'short status for passed tests, you may use unicodeescape here',),
+    ('pspec_short_failed', 'short_failed',
+     'short status for failed tests, you may use unicodeescape here',),
+    ('pspec_short_skipped', 'short_skipped',
+     'short status for skipped tests, you may use unicodeescape here',),
+    ('pspec_short_default', 'short_default',
+     'short status for other tests, you may use unicodeescape here',),
 ]
 
 
@@ -29,91 +34,59 @@ def pytest_addoption(parser):
             help=help_message,
             default=None
         )
+    parser.addini(
+        'pspec_show_header',
+        help='displays the header at the start of report output',
+        default='false'
+    )
 
 
-@pytest.mark.trylast
+@pytest.hookimpl(trylast=True)
 def pytest_configure(config):
-    if config.option.pspec:
-        # Get the standard terminal reporter plugin and replace it with ours
-        standard_reporter = config.pluginmanager.getplugin('terminalreporter')
-        pspec_reporter = PspecTerminalReporter(standard_reporter.config)
-        config.pluginmanager.unregister(standard_reporter)
-        config.pluginmanager.register(pspec_reporter, 'terminalreporter')
+    for option_name, attr_name, _ in _PSPEC_OPTIONS:
+        value = config.getini(option_name)
+        if value:
+            try:
+                value = eval(f"'{value}'")
+            except:  # pragma: nocover
+                pass
+            setattr(OutcomeCharacters, attr_name, value)
 
 
 def pytest_collection_modifyitems(config, items):
     if not config.option.pspec:
         return
+    if config.option.verbose == 0:
+        return
 
+    last_mode_str = None
     for item in items:
         node = item.obj
-        parent = item.parent.obj
         node_parts = item.nodeid.split('::')
         node_str = node.__doc__ or node_parts[-1]
-
-        if hasattr(item, "callspec"):
-            node_str = node_str.format(**item.callspec.params)
+        node_str = node_str.strip()
 
         mode_str = node_parts[0]
-        klas_str = ''
-        node_parts_length = len(node_parts)
-
-        if node_parts_length > 3:
-            klas_str = parent.__doc__ or node_parts[-3]
-        elif node_parts_length > 2:
-            klas_str = parent.__doc__ or node_parts[-2]
-
-        item._nodeid = '::'.join([mode_str, klas_str, node_str])
+        if mode_str != last_mode_str:
+            last_mode_str = mode_str
+            item._nodeid = f'{mode_str}\n  {node_str}'
+        else:
+            item._nodeid = f'  {node_str}'
 
 
-class PspecTerminalReporter(TerminalReporter):
-
-    def __init__(self, config, file=None):
-        TerminalReporter.__init__(self, config, file)
-        self._last_header = None
-        self.pattern_config = models.PatternConfig(
-            files=self.config.getini('python_files'),
-            functions=self.config.getini('python_functions'),
-            classes=self.config.getini('python_classes')
-        )
-        self.result_wrappers = []
-        self.result_wrappers.append(UnicodeWrapper)
-        for option_name, attr_name, _ in _PSPEC_OPTIONS:
-            value = config.getini(option_name)
-            if value:
-                try:
-                    value = eval(f"'{value}'")
-                except:
-                    pass
-                setattr(OutcomeCharacters, attr_name, value)
-
-    def _register_stats(self, report):
-        """
-        This method is not created for this plugin, but it is needed in order
-        to the reporter display the tests summary at the end.
-
-        Originally from:
-        https://github.com/pytest-dev/pytest/blob/47a2a77/_pytest/terminal.py#L198-L201
-        """
-        res = self.config.hook.pytest_report_teststatus(
-            report=report,
-            config=self.config)
-        category = res[0]
-        self.stats.setdefault(category, []).append(report)
-        self._tests_ran = True
-
-    def pytest_runtest_logreport(self, report):
-        self._register_stats(report)
-
-        if report.when != 'call' and not report.skipped:
-            return
-
-        result = models.Result.create(report, self.pattern_config)
-
-        for wrapper in self.result_wrappers:
-            result = wrapper(result)
-
-        self._last_header = result.header
-        self._tw.sep(' ')
-        self._tw.line(result.header)
-        self._tw.line(str(result))
+@pytest.hookimpl()
+def pytest_report_teststatus(report, config):
+    boo = report.when == 'call'
+    boo = boo or report.when == 'setup' and report.outcome == 'skipped'
+    if config.option.pspec and boo:
+        if config.option.verbose:
+            emoji = OutcomeCharacters.get_outcome(report)
+        else:
+            emoji = OutcomeCharacters.get_short_outcome(report)
+        spaces = '.' * 80
+        node_len = len(report.nodeid.rsplit('\n', 1)[-1].strip())
+        suffix = ''
+        if config.option.verbose > 0:
+            suffix = f' [{report.duration:7.2f}s]'
+        result = f'{spaces[:75 - node_len]}{emoji}{suffix}'
+        return report.outcome, emoji, (result, {})
