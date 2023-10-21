@@ -18,7 +18,7 @@ class OutcomeCharacters:
     default = '»'
 
 
-class UTF8Wrapper(Wrapper):
+class UnicodeWrapper(Wrapper):
 
     def __str__(self):
         outcome = getattr(

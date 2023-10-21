@@ -68,7 +68,7 @@ class PspecTerminalReporter(TerminalReporter):
         self.result_wrappers = []
 
         if config.getini('pspec_format') != 'plaintext':
-            self.result_wrappers.append(wrappers.UTF8Wrapper)
+            self.result_wrappers.append(wrappers.UnicodeWrapper)
 
     def _register_stats(self, report):
         """
