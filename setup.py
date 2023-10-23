@@ -20,10 +20,6 @@ setup(
     author_email='p.shingavi@yahoo.com',
     url='https://github.com/angry-penguins/pytest-aspec',
     keywords='pytest pspec test report bdd rspec',
-    install_requires=[
-        'pytest>=3.0.0',
-        'six>=1.11.0',
-    ],
     scripts=['bin/pspec'],
     packages=['pytest_aspec'],
     classifiers=[
