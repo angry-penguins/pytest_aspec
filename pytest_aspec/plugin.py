@@ -89,4 +89,4 @@ def pytest_report_teststatus(report, config):
         if config.option.verbose > 0:
             suffix = f' [{report.duration:7.2f}s]'
         result = f'{spaces[:75 - node_len]}{emoji}{suffix}'
-        return report.outcome, emoji, (result, {})
+        return report.outcome, emoji, result
