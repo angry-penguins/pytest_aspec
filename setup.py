@@ -13,7 +13,7 @@ def read(fname):
 
 setup(
     name='pytest_aspec',
-    version='1.2',
+    version='1.3',
     description='A rspec format reporter for pytest',
     long_description=read('README.rst'),
     author='2ps',
